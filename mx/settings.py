@@ -17,12 +17,12 @@ import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
+sys.path.insert(1, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-#gitr
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '&6$p(lg1$u+ijkmi25_sp5f+uj*@-6(=3urhmvl)5t-z(lr$ns'
@@ -34,6 +34,10 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+# 自定义用户名登录方法指定
+AUTHENTICATION_BACKENDS = (
+    'postRTS.views.CustomBackend',
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -48,8 +52,11 @@ INSTALLED_APPS = [
     'courses',
     'operation',
     'organization',
+    'postRTS',
 ]
-AUTH_USER_MODEL = "users.UserProfile" #数据库扩展需要重写改字段
+
+# USER数据库扩展需要重写改字段
+AUTH_USER_MODEL = "users.UserProfile"
 
 
 MIDDLEWARE_CLASSES = [
@@ -68,8 +75,7 @@ ROOT_URLCONF = 'mx.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.media',
             ],
         },
     },
@@ -93,8 +100,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mx',
         'USER': 'root',
-        'PASSWORD' : 'root',
-        'PATH' : '127.0.0.1'
+        'PASSWORD': 'root',
+        'PATH': '127.0.0.1'
     }
 }
 
@@ -136,3 +143,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# 上传文件路径
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
